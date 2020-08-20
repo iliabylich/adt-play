@@ -18,20 +18,6 @@ pub enum JSON {
     Object(Vec<(String, JSON)>)
 }
 
-impl std::ops::Add for JSON {
-    type Output = Self;
-    fn add(self, rhs: Self) -> Self::Output {
-        match (self, rhs) {
-            (JSON::String(one), JSON::String(two)) => JSON::String(one + &two),
-            (JSON::Array(one), JSON::Array(two)) => JSON::Array(one.into_iter().chain(two.into_iter()).collect()),
-            (JSON::Object(one), JSON::Object(two)) => JSON::Object(one.into_iter().chain(two.into_iter()).collect()),
-            (one, two) => {
-                panic!("Internal error: can't concatenate {:#?} and {:#?}", one, two)
-            }
-        }
-    }
-}
-
 pub fn parse(input: &str) -> Result<JSON, ParseError> {
     Parser::new(input).parse()
 }
@@ -145,8 +131,5 @@ mod tests {
             Ok(result) => assert_eq!(result, expected),
             Err(err) => panic!("parse error, {}", err)
         }
-
-
-
     }
 }
